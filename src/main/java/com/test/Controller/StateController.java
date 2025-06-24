@@ -1,0 +1,70 @@
+package com.test.Controller;
+
+import com.test.dto.CititesDto.CityDto;
+import com.test.dto.CititesDto.CityFilterDto;
+import com.test.dto.StatesDto.StateCreateDto;
+import com.test.dto.StatesDto.StateDto;
+import com.test.dto.StatesDto.StateFilterDto;
+import com.test.dto.StatesDto.StateUpdateDto;
+import com.test.mapper.StateMapper;
+import com.test.service.StateService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/v1/state")
+public class StateController {
+
+
+    private StateService stateService;
+
+    public StateController(StateService stateService) {
+        this.stateService = stateService;
+    }
+
+    @Autowired
+    private StateMapper stateMapper;
+
+    @PostMapping("/created")
+    public ResponseEntity<StateDto> createState(@RequestBody StateCreateDto dto) {
+        StateDto state = stateService.createState(dto);
+        return new ResponseEntity<>(state, HttpStatus.CREATED);
+    }
+
+
+    @DeleteMapping("/{stateId}")
+    public void deleteState(@PathVariable Long stateId) {
+        stateService.deleteState(stateId);
+    }
+
+    @GetMapping
+    public List<StateDto> getAllStates(){
+        List<StateDto> list = stateService.getAllStates();
+        return list;
+    }
+
+    @GetMapping("/{stateId}")
+    public StateDto getById(Long stateId){
+        StateDto dto = stateService.getById(stateId);
+        return dto;
+    }
+
+    @PutMapping("/state/{stateId}")
+    public StateUpdateDto updateData(@PathVariable Long stateId , @RequestBody StateUpdateDto stateUpdateDto){
+        return stateService.updateStateData(stateId,stateUpdateDto);
+    }
+
+
+
+
+
+
+
+
+
+
+}
