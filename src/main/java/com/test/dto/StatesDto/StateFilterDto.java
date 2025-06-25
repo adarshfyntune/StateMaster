@@ -1,40 +1,48 @@
 package com.test.dto.StatesDto;
 
+import com.test.enums.Status;
+import org.springframework.format.annotation.DateTimeFormat;
+import java.time.LocalDateTime;
+
 public class StateFilterDto {
-    private Integer page;
-    private Integer pageSize;
-    private String sortBy;
-    private String sortDirection;
+   private String stateName;
+   private Status status;
 
-    public Integer getPage() {
-        return page;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime createdAtFrom;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime createdAtTo;
+
+    public String getStateName() {
+        return stateName;
     }
 
-    public void setPage(Integer page) {
-        this.page = page;
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 
-    public Integer getPageSize() {
-        return pageSize;
+    public Status getStatus() {
+        return status;
     }
 
-    public void setPageSize(Integer pageSize) {
-        this.pageSize = pageSize;
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
-    public String getSortBy() {
-        return sortBy;
+    public LocalDateTime getCreatedAtFrom() {
+        return createdAtFrom;
     }
 
-    public void setSortBy(String sortBy) {
-        this.sortBy = sortBy;
+    public void setCreatedAtFrom(LocalDateTime createdAtFrom) {
+        this.createdAtFrom = createdAtFrom;
     }
 
-    public String getSortDirection() {
-        return sortDirection;
+    public LocalDateTime getCreatedAtTo() {
+        return createdAtTo;
     }
 
-    public void setSortDirection(String sortDirection) {
-        this.sortDirection = sortDirection;
+    public void setCreatedAtTo(LocalDateTime createdAtTo) {
+        this.createdAtTo = createdAtTo;
     }
 }

@@ -4,10 +4,7 @@ import com.test.dto.CititesDto.CityCreateDto;
 import com.test.dto.CititesDto.CityDto;
 import com.test.dto.CititesDto.CityFilterDto;
 import com.test.dto.CititesDto.CityUpdateDto;
-import com.test.dto.PinDtos.PinCodeDto;
-import com.test.dto.PinDtos.PinCodeFilterDto;
 import com.test.entity.City;
-import com.test.entity.PinCode;
 import com.test.entity.State;
 import com.test.mapper.CityMapper;
 import com.test.respository.CityRepository;
@@ -16,8 +13,6 @@ import com.test.specification.AllSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -81,14 +76,4 @@ public class CityServiceImpl implements CityService {
         Page<City> cityPage = cityRepository.findAll(citySpec, PageRequest.of(page,size));
         return cityPage.map(cityMapper::toDto);
     }
-
-
-//    @Override
-//    public Page<PinCodeDto> getFilteredPinCodes(PinCodeFilterDto filterDto, int page, int size) {
-//        var spec = AllSpecification.getPinSpecification(filterDto);
-//        Page<PinCode> pinCodePage = pinCodeRepository.findAll(spec, PageRequest.of(page, size));
-//        return pinCodePage.map(pinCodeMapper::entityToDto);
-//    }
-
-
 }

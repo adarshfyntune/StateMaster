@@ -1,8 +1,6 @@
 package com.test.dto.CititesDto;
-
 import com.test.enums.Status;
 import org.springframework.format.annotation.DateTimeFormat;
-
 import java.time.LocalDateTime;
 
 public class CityFilterDto {

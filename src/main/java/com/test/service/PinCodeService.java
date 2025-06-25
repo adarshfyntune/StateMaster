@@ -4,8 +4,6 @@ import com.test.dto.PinDtos.PinCodeCreateDto;
 import com.test.dto.PinDtos.PinCodeDto;
 import com.test.dto.PinDtos.PinCodeFilterDto;
 import com.test.dto.PinDtos.PinCodeUpdateDto;
-import com.test.dto.StatesDto.StateDto;
-import com.test.dto.StatesDto.StateFilterDto;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

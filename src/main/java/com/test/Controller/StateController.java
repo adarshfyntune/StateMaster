@@ -1,7 +1,4 @@
 package com.test.Controller;
-
-import com.test.dto.CititesDto.CityDto;
-import com.test.dto.CititesDto.CityFilterDto;
 import com.test.dto.StatesDto.StateCreateDto;
 import com.test.dto.StatesDto.StateDto;
 import com.test.dto.StatesDto.StateFilterDto;
@@ -57,6 +54,17 @@ public class StateController {
     public StateUpdateDto updateData(@PathVariable Long stateId , @RequestBody StateUpdateDto stateUpdateDto){
         return stateService.updateStateData(stateId,stateUpdateDto);
     }
+
+    @PostMapping("/stateFilter")
+    public Page<StateDto> searchStates(@RequestBody StateFilterDto stateFilterDto,
+                                       @RequestParam( value = "page",defaultValue = "0", required = false) int page,
+                                       @RequestParam(value = "pageSize",defaultValue = "5", required = false) int size) {
+    return stateService.searchStates(stateFilterDto, page, size);
+
+    }
+
+
+
 
 
 

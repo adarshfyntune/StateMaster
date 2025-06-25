@@ -2,9 +2,7 @@ package com.test.dto.PinDtos;
 
 import com.test.enums.Status;
 import org.springframework.format.annotation.DateTimeFormat;
-
 import java.time.LocalDateTime;
-
 public class PinCodeFilterDto {
 
     private Long pincode;

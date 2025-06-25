@@ -3,8 +3,6 @@ import com.test.dto.CititesDto.CityCreateDto;
 import com.test.dto.CititesDto.CityDto;
 import com.test.dto.CititesDto.CityFilterDto;
 import com.test.dto.CititesDto.CityUpdateDto;
-import com.test.dto.PinDtos.PinCodeDto;
-import com.test.dto.PinDtos.PinCodeFilterDto;
 import com.test.service.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -60,13 +58,4 @@ public class CityController {
                                            @RequestParam(value = "pageSize",defaultValue = "5", required = false) int size) {
         return cityService.getFilteredCities(cityFilterDto,page, size);
     }
-
-
-//    @PostMapping("/filter")
-//    public Page<PinCodeDto> getFilteredPinCodes(@RequestBody PinCodeFilterDto filterDto,
-//                                                @RequestParam( value = "page",defaultValue = "0", required = false) int page,
-//                                                @RequestParam(value = "pageSize",defaultValue = "5", required = false) int size) {
-//        return pinCodeService.getFilteredPinCodes(filterDto, page, size);
-//    }
-
 }

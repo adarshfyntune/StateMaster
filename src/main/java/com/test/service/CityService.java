@@ -4,8 +4,6 @@ import com.test.dto.CititesDto.CityCreateDto;
 import com.test.dto.CititesDto.CityDto;
 import com.test.dto.CititesDto.CityFilterDto;
 import com.test.dto.CititesDto.CityUpdateDto;
-import com.test.dto.PinDtos.PinCodeDto;
-import com.test.dto.PinDtos.PinCodeFilterDto;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

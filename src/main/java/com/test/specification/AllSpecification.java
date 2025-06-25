@@ -2,17 +2,14 @@ package com.test.specification;
 
 import com.test.dto.CititesDto.CityFilterDto;
 import com.test.dto.PinDtos.PinCodeFilterDto;
+import com.test.dto.StatesDto.StateFilterDto;
 import com.test.entity.City;
 import com.test.entity.PinCode;
 import com.test.entity.State;
-import com.test.enums.Status;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,8 +64,31 @@ public class AllSpecification {
             if (cityFilterDto.getCreatedAtTo() != null) {
                 predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("createdAt"), cityFilterDto.getCreatedAtTo()));
             }
-
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+    }
+    public static Specification<State> getStateSpecification(StateFilterDto stateFilterDto) {
+
+        return (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if(stateFilterDto.getStateName() != null){
+                predicates.add(criteriaBuilder.equal(root.get("stateName"), stateFilterDto.getStateName()));
+            }
+
+            if (stateFilterDto.getStatus() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("status"), stateFilterDto.getStatus()));
+            }
+
+            if (stateFilterDto.getCreatedAtFrom() != null) {
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("createdAt"), stateFilterDto.getCreatedAtFrom()));
+            }
+
+            if (stateFilterDto.getCreatedAtTo() != null) {
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("createdAt"), stateFilterDto.getCreatedAtTo()));
+            }
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+
         };
     }
 

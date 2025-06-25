@@ -1,22 +1,16 @@
 package com.test.service;
-
-import com.test.dto.CititesDto.CityDto;
-import com.test.dto.CititesDto.CityFilterDto;
 import com.test.dto.StatesDto.StateCreateDto;
 import com.test.dto.StatesDto.StateDto;
 import com.test.dto.StatesDto.StateFilterDto;
 import com.test.dto.StatesDto.StateUpdateDto;
-import com.test.entity.City;
 import com.test.entity.State;
 import com.test.mapper.StateMapper;
 import com.test.respository.StateRepository;
+import com.test.specification.AllSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -73,7 +67,11 @@ public class StateServiceImpl implements StateService {
         return stateMapper.toUpdateDto(updateState);
     }
 
+    @Override
+    public Page<StateDto> searchStates(StateFilterDto stateFilterDto, int page, int size) {
+        var stateSpec = AllSpecification.getStateSpecification(stateFilterDto);
+        Page<State> statePage = stateRepository.findAll(stateSpec, PageRequest.of(page, size));
 
-
-
+        return statePage.map(stateMapper::toDto);
+    }
 }
