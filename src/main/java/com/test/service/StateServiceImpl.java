@@ -7,10 +7,15 @@ import com.test.entity.State;
 import com.test.mapper.StateMapper;
 import com.test.respository.StateRepository;
 import com.test.specification.AllSpecification;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+//import com.test.repository.StateRepository;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -73,5 +78,48 @@ public class StateServiceImpl implements StateService {
         Page<State> statePage = stateRepository.findAll(stateSpec, PageRequest.of(page, size));
 
         return statePage.map(stateMapper::toDto);
+    }
+
+    @Override
+    public void exportStatesToExcel(HttpServletResponse response) throws IOException {
+        List<State> states = stateRepository.findAll();
+
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("States");
+
+        String[] columns = {"State ID", "State Name", "Created At", "Updated At", "Deleted At", "Status"};
+
+        // Header font and style
+        Font headerFont = workbook.createFont();
+        headerFont.setBold(true);
+        CellStyle headerStyle = workbook.createCellStyle();
+        headerStyle.setFont(headerFont);
+
+        // Header row
+        Row headerRow = sheet.createRow(0);
+        for (int col = 0; col < columns.length; col++) {
+            Cell cell = headerRow.createCell(col);
+            cell.setCellValue(columns[col]);
+            cell.setCellStyle(headerStyle);
+        }
+
+        // Data rows
+        int rowIdx = 1;
+        for (State state : states) {
+            Row row = sheet.createRow(rowIdx++);
+            row.createCell(0).setCellValue(state.getStateId());
+            row.createCell(1).setCellValue(state.getStateName());
+            row.createCell(2).setCellValue(state.getCreatedAt() != null ? state.getCreatedAt().toString() : "");
+            row.createCell(3).setCellValue(state.getUpdatedAt() != null ? state.getUpdatedAt().toString() : "");
+            row.createCell(4).setCellValue(state.getDeletedAt() != null ? state.getDeletedAt().toString() : "");
+            row.createCell(5).setCellValue(state.getStatus().name());
+        }
+
+        // Set response for file download
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment; filename=states.xlsx");
+
+        workbook.write(response.getOutputStream());
+        workbook.close();
     }
 }
