@@ -66,9 +66,9 @@ public class StateController {
     }
 
 
-    @GetMapping("/export")
-    public void exportToExcel(HttpServletResponse response) throws IOException {
-        stateService.exportStatesToExcel(response);
+    @GetMapping("/exportSheet")
+    public void exportStatesToExcelFile(HttpServletResponse response) throws IOException {
+        stateService.exportStatesToExcelFile(response);
     }
 
 

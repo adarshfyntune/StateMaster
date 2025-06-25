@@ -16,7 +16,7 @@ public interface StateService {
     List<StateDto> getAllStates();
     StateUpdateDto updateStateData(Long stateId, StateUpdateDto stateUpdateDto);
     Page<StateDto> searchStates(StateFilterDto stateFilterDto, int page, int size);
-    void exportStatesToExcel(HttpServletResponse response) throws IOException;
+    void exportStatesToExcelFile(HttpServletResponse response) throws IOException;
 
 
 

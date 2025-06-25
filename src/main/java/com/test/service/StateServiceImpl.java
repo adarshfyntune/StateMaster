@@ -81,21 +81,18 @@ public class StateServiceImpl implements StateService {
     }
 
     @Override
-    public void exportStatesToExcel(HttpServletResponse response) throws IOException {
+    public void exportStatesToExcelFile(HttpServletResponse response) throws IOException {
         List<State> states = stateRepository.findAll();
 
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("States");
 
         String[] columns = {"State ID", "State Name", "Created At", "Updated At", "Deleted At", "Status"};
-
-        // Header font and style
         Font headerFont = workbook.createFont();
         headerFont.setBold(true);
         CellStyle headerStyle = workbook.createCellStyle();
         headerStyle.setFont(headerFont);
 
-        // Header row
         Row headerRow = sheet.createRow(0);
         for (int col = 0; col < columns.length; col++) {
             Cell cell = headerRow.createCell(col);
