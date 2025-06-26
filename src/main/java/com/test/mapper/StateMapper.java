@@ -11,6 +11,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface StateMapper {
+
     State toEntity(StateCreateDto dto);
     StateDto toDto(State state);
     List<StateDto> toDto(List<State> state);

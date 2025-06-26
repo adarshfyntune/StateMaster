@@ -6,7 +6,7 @@ public class PinCodeDto {
 
     private Long pincodeId;
     private Long pincode;
-     private Status status;
+    private Status status;
     private Long cityId;
 
     public Long getPincodeId() {

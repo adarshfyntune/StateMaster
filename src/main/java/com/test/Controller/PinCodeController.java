@@ -6,9 +6,11 @@ import com.test.dto.PinDtos.PinCodeFilterDto;
 import com.test.dto.PinDtos.PinCodeUpdateDto;
 import com.test.mapper.PinCodeMapper;
 import com.test.service.PinCodeService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -56,6 +58,12 @@ public class PinCodeController {
                                                 @RequestParam( value = "page",defaultValue = "0", required = false) int page,
                                                 @RequestParam(value = "pageSize",defaultValue = "5", required = false) int size) {
         return pinCodeService.getFilteredPinCodes(filterDto, page, size);
+    }
+
+
+    @GetMapping("/exportPinCodeFile")
+    public void exportPinCodesToExcel(HttpServletResponse response) throws IOException {
+        pinCodeService.exportPinCodesToExcelFiles(response);
     }
 
 

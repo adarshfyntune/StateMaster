@@ -3,6 +3,7 @@ package com.test.dto.PinDtos;
 public class PinCodeCreateDto {
 
     private Long pincode;
+
     private Long cityId;
 
     public Long getPincode() {

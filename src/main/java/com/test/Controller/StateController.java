@@ -3,6 +3,7 @@ import com.test.dto.StatesDto.StateCreateDto;
 import com.test.dto.StatesDto.StateDto;
 import com.test.dto.StatesDto.StateFilterDto;
 import com.test.dto.StatesDto.StateUpdateDto;
+
 import com.test.mapper.StateMapper;
 import com.test.service.StateService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -11,9 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
-
 import java.io.IOException;
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/v1/state")
@@ -65,22 +66,9 @@ public class StateController {
     return stateService.searchStates(stateFilterDto, page, size);
     }
 
-
     @GetMapping("/exportSheet")
     public void exportStatesToExcelFile(HttpServletResponse response) throws IOException {
         stateService.exportStatesToExcelFile(response);
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

@@ -4,8 +4,11 @@ import com.test.dto.CititesDto.CityCreateDto;
 import com.test.dto.CititesDto.CityDto;
 import com.test.dto.CititesDto.CityFilterDto;
 import com.test.dto.CititesDto.CityUpdateDto;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.data.domain.Page;
 
+
+import java.io.IOException;
 import java.util.List;
 
 public interface CityService {
@@ -23,6 +26,6 @@ public interface CityService {
 
      Page<CityDto> getFilteredCities(CityFilterDto cityFilterDto, int page, int size);
 
-
+     void exportCitiesToExcelFile(HttpServletResponse response) throws IOException;
 
 }

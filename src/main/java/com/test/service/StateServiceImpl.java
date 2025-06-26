@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-//import com.test.repository.StateRepository;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.IOException;
@@ -100,7 +99,7 @@ public class StateServiceImpl implements StateService {
             cell.setCellStyle(headerStyle);
         }
 
-        // Data rows
+
         int rowIdx = 1;
         for (State state : states) {
             Row row = sheet.createRow(rowIdx++);
@@ -111,12 +110,14 @@ public class StateServiceImpl implements StateService {
             row.createCell(4).setCellValue(state.getDeletedAt() != null ? state.getDeletedAt().toString() : "");
             row.createCell(5).setCellValue(state.getStatus().name());
         }
-
-        // Set response for file download
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=states.xlsx");
 
         workbook.write(response.getOutputStream());
         workbook.close();
     }
+
+
+
+
 }

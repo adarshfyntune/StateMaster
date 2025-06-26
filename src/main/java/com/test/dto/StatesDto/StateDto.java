@@ -5,6 +5,8 @@ public class StateDto {
     private Long stateId;
     private String stateName;
 
+
+
     public Long getStateId() {
         return stateId;
     }

@@ -11,14 +11,10 @@ import java.util.List;
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface PinCodeMapper {
 
-//    PinCode dtoToEntity(PinCodeDto pinCodeDto);
     PinCode dtoToEntity(PinCodeCreateDto pinCodeCreateDto);
-
     @Mapping(target = "cityId", source = "city.cityId")
     PinCodeDto entityToDto(PinCode pinCode);
-
     List<PinCodeDto> entityToDtoList(List<PinCode> pinCode);
-
     PinCodeUpdateDto toUpdatePinCode(PinCode pinCode);
 
 }
