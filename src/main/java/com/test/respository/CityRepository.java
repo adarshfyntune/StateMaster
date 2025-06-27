@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface CityRepository extends JpaRepository<City, Long>, JpaSpecificationExecutor<City> {
 
-
+    City findByCityIdAndDeletedAtNull(Long cityId);
 }

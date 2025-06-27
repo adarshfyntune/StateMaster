@@ -14,6 +14,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.web.multipart.MultipartFile;
+
+
 import java.io.IOException;
 import java.util.List;
 
@@ -81,7 +84,7 @@ public class StateServiceImpl implements StateService {
 
     @Override
     public void exportStatesToExcelFile(HttpServletResponse response) throws IOException {
-        List<State> states = stateRepository.findAll();
+        List<State> states= stateRepository.findAll();
 
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("States");
@@ -98,7 +101,6 @@ public class StateServiceImpl implements StateService {
             cell.setCellValue(columns[col]);
             cell.setCellStyle(headerStyle);
         }
-
 
         int rowIdx = 1;
         for (State state : states) {
@@ -118,6 +120,48 @@ public class StateServiceImpl implements StateService {
     }
 
 
+    @Override
+    public String importStatesToExcelFile(MultipartFile file) throws IOException {
+        // Load workbook from the uploaded file
+        Workbook workbook = new XSSFWorkbook(file.getInputStream());
+        Sheet sheet = workbook.getSheetAt(0);
 
+        int rowCount = 0;
+        for (Row row : sheet) {
+            if (row.getRowNum() == 0) continue; // skip header
+
+            Cell cell = row.getCell(0);
+            if (cell == null || cell.getCellType() == CellType.BLANK) continue;
+
+            State state = new State();
+            state.setStateName(getCellValueAsString(cell));
+            stateRepository.save(state);
+            rowCount++;
+        }
+
+        workbook.close();
+        return rowCount + " states inserted successfully.";
+    }
+
+    private String getCellValueAsString(Cell cell) {
+        switch (cell.getCellType()) {
+            case STRING:
+                return cell.getStringCellValue().trim();
+            case NUMERIC:
+                if (DateUtil.isCellDateFormatted(cell)) {
+                    return cell.getDateCellValue().toString();
+                } else {
+                    double value = cell.getNumericCellValue();
+                    return (value == Math.floor(value)) ?
+                            String.valueOf((int) value) : String.valueOf(value);
+                }
+            case BOOLEAN:
+                return String.valueOf(cell.getBooleanCellValue());
+            case FORMULA:
+                return cell.getCellFormula();
+            default:
+                return "";
+        }
+    }
 
 }

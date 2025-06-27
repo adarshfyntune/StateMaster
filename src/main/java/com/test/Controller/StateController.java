@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -69,6 +71,16 @@ public class StateController {
     @GetMapping("/exportSheet")
     public void exportStatesToExcelFile(HttpServletResponse response) throws IOException {
         stateService.exportStatesToExcelFile(response);
+    }
+
+    @PostMapping(value = "/importCities", consumes = "multipart/form-data")
+    public ResponseEntity<String> importStates(@RequestPart("file") MultipartFile file) {
+        try {
+            String response = stateService.importStatesToExcelFile(file);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Failed: " + e.getMessage());
+        }
     }
 
 }

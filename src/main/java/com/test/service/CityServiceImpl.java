@@ -17,9 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CityServiceImpl implements CityService {
@@ -122,5 +124,27 @@ public class CityServiceImpl implements CityService {
         workbook.close();
     }
 
+    @Override
+    public String saveExcelImport(MultipartFile file) throws IOException {
+        Workbook workbook=new XSSFWorkbook(file.getInputStream());
+        Sheet sheet =workbook.getSheetAt(0);
+        sheet.forEach(row->{
+            if(row.getRowNum()!=0){
+                City city = new City();
+                city.setCityName(row.getCell(1).getStringCellValue());
+                String stateName=row.getCell(2).getStringCellValue();
+                State state = stateRepository.findByStateNameIgnoreCase(stateName).orElseThrow(()->
+                        new IllegalArgumentException("state name not found"));
+                if (state!=null){
+                    city.setState(state);
+                }
+                cityRepository.save(city);
+            }
+        });
+
+        return "data inserted successfully";
+    }
 
 }
+
+

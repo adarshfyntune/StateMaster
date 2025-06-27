@@ -7,6 +7,7 @@ import com.test.dto.StatesDto.StateUpdateDto;
 import org.springframework.data.domain.Page;
 import java.util.List;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.IOException;
@@ -19,7 +20,6 @@ public interface StateService {
     StateUpdateDto updateStateData(Long stateId, StateUpdateDto stateUpdateDto);
     Page<StateDto> searchStates(StateFilterDto stateFilterDto, int page, int size);
     void exportStatesToExcelFile(HttpServletResponse response) throws IOException;
-
-
+    String importStatesToExcelFile(MultipartFile file) throws IOException;
 
 }

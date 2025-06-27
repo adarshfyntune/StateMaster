@@ -6,6 +6,7 @@ import com.test.dto.CititesDto.CityFilterDto;
 import com.test.dto.CititesDto.CityUpdateDto;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.IOException;
@@ -27,5 +28,7 @@ public interface CityService {
      Page<CityDto> getFilteredCities(CityFilterDto cityFilterDto, int page, int size);
 
      void exportCitiesToExcelFile(HttpServletResponse response) throws IOException;
+
+     String saveExcelImport(MultipartFile file) throws IOException;
 
 }

@@ -7,7 +7,11 @@ import com.test.service.CityService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -64,5 +68,12 @@ public class CityController {
     @GetMapping("/exportCitySheet")
     public void exportCitiesToExcelFile(HttpServletResponse response) throws IOException {
         cityService.exportCitiesToExcelFile(response);
+    }
+
+    @PostMapping(value = "/cities/bulkupload" ,consumes = "multipart/form-data")
+    public ResponseEntity<String> cityBulkupload(@RequestParam("file") MultipartFile file) throws IOException {
+        String data=cityService.saveExcelImport(file);
+        return new ResponseEntity<String>(data, HttpStatus.OK);
+
     }
 }
