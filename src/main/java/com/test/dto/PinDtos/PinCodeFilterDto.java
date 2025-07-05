@@ -15,6 +15,9 @@ public class PinCodeFilterDto {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime createdAtTo;
 
+    public PinCodeFilterDto(Long pinCode, String cityName, String stateName) {
+    }
+
     public Long getPincode() {
         return pincode;
     }

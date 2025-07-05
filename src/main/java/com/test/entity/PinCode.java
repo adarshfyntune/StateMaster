@@ -17,8 +17,8 @@ public class PinCode {
     @Column(name = "pincode_id")
     private Long pincodeId;
 
-    @Column(name = "pincode")
-    private Long pincode;
+    @Column(name = "pincode", nullable = false)
+    private Long pinCode;
 
     @ManyToOne
     @JoinColumn(name = "city_id", nullable = false)
@@ -39,16 +39,6 @@ public class PinCode {
     @Column(name = "status")
     private Status status = Status.ACTIVE;
 
-
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
     public Long getPincodeId() {
         return pincodeId;
     }
@@ -57,12 +47,12 @@ public class PinCode {
         this.pincodeId = pincodeId;
     }
 
-    public Long getPincode() {
-        return pincode;
+    public Long getPinCode() {
+        return pinCode;
     }
 
-    public void setPincode(Long pincode) {
-        this.pincode = pincode;
+    public void setPinCode(Long pinCode) {
+        this.pinCode = pinCode;
     }
 
     public City getCity() {
@@ -97,9 +87,17 @@ public class PinCode {
         this.deletedAt = deletedAt;
     }
 
-    public PinCode(Long pincodeId, Long pincode, City city, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt, Status status) {
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public PinCode(Long pincodeId, Long pinCode, City city, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt, Status status) {
         this.pincodeId = pincodeId;
-        this.pincode = pincode;
+        this.pinCode = pinCode;
         this.city = city;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;

@@ -5,6 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Entity
 @Table(name = "cities")
@@ -94,9 +95,6 @@ public class City {
         this.status = status;
     }
 
-    public City() {
-    }
-
     public City(Long cityId, String cityName, State state, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt, Status status) {
         this.cityId = cityId;
         this.cityName = cityName;
@@ -105,5 +103,8 @@ public class City {
         this.updatedAt = updatedAt;
         this.deletedAt = deletedAt;
         this.status = status;
+    }
+
+    public City() {
     }
 }

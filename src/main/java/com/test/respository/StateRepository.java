@@ -11,7 +11,6 @@ public interface StateRepository extends JpaRepository<State, Long>, JpaSpecific
 
     State findBystateIdAndDeletedAtIsNull(Long stateId);
 
-
-
     Optional<State> findByStateNameIgnoreCase(String stateName);
+
 }

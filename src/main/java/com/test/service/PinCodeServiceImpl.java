@@ -1,26 +1,28 @@
 package com.test.service;
 
-import com.test.dto.PinDtos.PinCodeCreateDto;
-import com.test.dto.PinDtos.PinCodeDto;
-import com.test.dto.PinDtos.PinCodeFilterDto;
-import com.test.dto.PinDtos.PinCodeUpdateDto;
+import com.test.config.PinCodeSearchDto;
+import com.test.dto.PinDtos.*;
 import com.test.entity.City;
 import com.test.entity.PinCode;
+import com.test.entity.State;
 import com.test.mapper.PinCodeMapper;
 import com.test.respository.CityRepository;
 import com.test.respository.PinCodeRepository;
+import com.test.respository.StateRepository;
 import com.test.specification.AllSpecification;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PinCodeServiceImpl implements PinCodeService {
@@ -30,6 +32,9 @@ public class PinCodeServiceImpl implements PinCodeService {
 
     @Autowired
     private CityRepository cityRepository;
+
+    @Autowired
+    private StateRepository stateRepository;
 
     @Autowired
     private PinCodeMapper pinCodeMapper;
@@ -50,9 +55,8 @@ public class PinCodeServiceImpl implements PinCodeService {
     @Override
     public PinCodeDto getById(Long pincodeId) {
         PinCode pinCode = pinCodeRepository.getReferenceById(pincodeId);
-        if(pinCode == null)
-        {
-            throw  new IllegalArgumentException("ID not found");
+        if (pinCode == null) {
+            throw new IllegalArgumentException("ID not found");
         }
         return pinCodeMapper.entityToDto(pinCode);
     }
@@ -66,8 +70,8 @@ public class PinCodeServiceImpl implements PinCodeService {
     @Override
     public PinCodeUpdateDto updatePinCode(Long pincodeId, PinCodeUpdateDto pinCodeUpdateDto) {
         PinCode pinCode = pinCodeRepository.findById(pincodeId)
-                .orElseThrow(()-> new IllegalArgumentException("PinCode Not Found with id"+pincodeId));
-        pinCode.setPincode(pinCodeUpdateDto.getPincode());
+                .orElseThrow(() -> new IllegalArgumentException("PinCode Not Found with id" + pincodeId));
+        pinCode.setPinCode(pinCodeUpdateDto.getPincode());
         pinCode = pinCodeRepository.save(pinCode);
 
         return pinCodeMapper.toUpdatePinCode(pinCode);
@@ -112,7 +116,7 @@ public class PinCodeServiceImpl implements PinCodeService {
             Row row = sheet.createRow(rowIdx++);
 
             row.createCell(0).setCellValue(pinCode.getPincodeId());
-            row.createCell(1).setCellValue(pinCode.getPincode());
+            row.createCell(1).setCellValue(pinCode.getPinCode());
 
             String cityName = pinCode.getCity() != null ? pinCode.getCity().getCityName() : "N/A";
             row.createCell(2).setCellValue(cityName);
@@ -130,6 +134,59 @@ public class PinCodeServiceImpl implements PinCodeService {
         workbook.close();
     }
 
+    @Override
+    public String importPinCodesToExcelFile(MultipartFile file) throws IOException {
+        Workbook workbook = new XSSFWorkbook(file.getInputStream());
+        Sheet sheet = workbook.getSheetAt(0);
+        sheet.forEach(row -> {
+            PinCode pinCode = new PinCode();
+            pinCode.setPinCode(Long.valueOf(row.getCell(1).getStringCellValue()));
+            String cityName = row.getCell(2).getStringCellValue();
+            String state = row.getCell(3).getStringCellValue();
+            City city = cityRepository.findByCityNameIgnoreCase(cityName).orElseThrow(() ->
+                    new IllegalArgumentException("City Name Not Found"));
+            pinCodeRepository.save(pinCode);
+
+        });
+        return "Data Inserted Sucessfully";
+    }
+
+
+    @Override
+    public void saveItemProcess(PinCodeSearchDto dto) {
+        // 1. Get or create the State
+        State state = stateRepository.findByStateNameIgnoreCase(dto.getStateName())
+                .orElseGet(() -> {
+                    State newState = new State();
+                    newState.setStateName(dto.getStateName());
+                    return stateRepository.save(newState);
+                });
+
+        // 2. Get or create the City (make sure State is assigned if required)
+        City city = cityRepository.findByCityNameIgnoreCase(dto.getCityName())
+                .orElseGet(() -> {
+                    City newCity = new City();
+                    newCity.setCityName(dto.getCityName());
+                    newCity.setState(state); // ✅ Link city to state
+                    return cityRepository.save(newCity);
+                });
+
+        // 3. Get or create the PinCode (link city)
+        pinCodeRepository.findByPinCode(dto.getPinCode())
+                .orElseGet(() -> {
+                    PinCode p = new PinCode();
+                    if (dto.getPinCode() == null) {
+                        // Handle the missing pin code:
+                        // 1. Log the error and skip saving
+                        // 2. Throw an exception to stop processing
+                        // 3. Or provide a default value if that makes sense
+                        throw new IllegalArgumentException("Pin code is required but was null or empty");
+                    }
+                    p.setPinCode(dto.getPinCode());
+                    p.setCity(city); // ✅ Link pincode to city
+                    return pinCodeRepository.save(p);
+                });
+    }
 
 
 

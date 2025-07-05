@@ -73,14 +73,9 @@ public class StateController {
         stateService.exportStatesToExcelFile(response);
     }
 
-    @PostMapping(value = "/importCities", consumes = "multipart/form-data")
-    public ResponseEntity<String> importStates(@RequestPart("file") MultipartFile file) {
-        try {
-            String response = stateService.importStatesToExcelFile(file);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Failed: " + e.getMessage());
-        }
-    }
+
+
+
+
 
 }

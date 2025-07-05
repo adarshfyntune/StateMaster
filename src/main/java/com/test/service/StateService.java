@@ -20,6 +20,5 @@ public interface StateService {
     StateUpdateDto updateStateData(Long stateId, StateUpdateDto stateUpdateDto);
     Page<StateDto> searchStates(StateFilterDto stateFilterDto, int page, int size);
     void exportStatesToExcelFile(HttpServletResponse response) throws IOException;
-    String importStatesToExcelFile(MultipartFile file) throws IOException;
 
 }
